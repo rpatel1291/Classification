@@ -37,3 +37,13 @@ df_test_ann$SexuponOutcome <- as.integer(df_test_ann$SexuponOutcome)
 df_test_ann$AgeuponOutcome <- as.integer(df_test_ann$AgeuponOutcome)
 df_test_ann$Breed <- as.integer(df_test_ann$Breed)
 df_test_ann$Color <- as.integer(df_test_ann$Color)
+
+#### 4. Different Funcitions ####
+
+library(kknn)
+
+library(C50)
+
+library(randomForest)
+
+library(neuralnet)
