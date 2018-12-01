@@ -6,10 +6,11 @@
 ####    setwd("~/Stevens/Fall2018/CS513_Knowledge_Discovery/Final Project/Classification")
 ####
 ##################################################################################################################
-
 rm(list = ls())
 
-df_train <- read.csv("./data/train.csv")
-df_test <- read.csv("./data/test.csv")
+library(kknn)
 
-df_kknn <- kknn(OutcomeType~., train = df_train_new, test = df_test_new, k = 10)
+df_train <- read.csv("./data/train_new.csv")
+df_test <- read.csv("./data/test_new.csv")
+
+df_kknn <- kknn(OutcomeType~., train = df_train, test = df_test, k = 10)
