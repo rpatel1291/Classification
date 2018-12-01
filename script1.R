@@ -3,154 +3,82 @@
 ####  Group: Ravi P., Derek P., Aneesh K., Ninad K.
 ####  Date: 11/28/2018
 ####  Comment:
-####
+####    setwd("~/Stevens/Fall2018/CS513_Knowledge_Discovery/Final Project/Classification")
 ####
 ##################################################################################################################
 
+setwd("~/Stevens/Fall2018/CS513_Knowledge_Discovery/Final Project/Classification")
 #### 0. Clean environment ####
 rm(list = ls())
 
-#### 1. Import dataset ####
+#### 1. Import dataset and libraries ####
 df_train <- read.csv("./data/train.csv", na.strings = "?")
 df_test <- read.csv("./data/test.csv", na.strings = "?")
 
-
-#### 1a. Cleaning of data ####
-### Train ###
-## Removing blanks in OutcomeSubtype ##
-i<-1
-temp <- c()
-for(x in df_train$OutcomeSubtype){
-  if(x == ""){
-    temp<-c(temp,i)
-  }
-  i<-i+1
-}
-if(length(temp) > 0){
-  df_train2 <- df_train[-temp,]
-}else{
-  df_train2 <- df_train
-}
-rm(i)
-rm(temp)
-rm(x)
-
-## Removing Unknown in SexuponOutcome ##
-i<-1
-temp <- c()
-for(x in df_train2$SexuponOutcome){
-  if(x == "Unknown"){
-    temp<-c(temp,i)
-  }
-  i<-i+1
-}
-df_train2<- df_train2[-temp,]
-rm(i)
-rm(temp)
-rm(x)
-
-## Removing blanks from AgeuponOutcome ##
-i<-1
-temp <- c()
-for(x in df_train2$AgeuponOutcome){
-  if(x == ""){
-    temp<-c(temp,i)
-  }
-  i<-i+1
-}
-df_train2<- df_train2[-temp,]
-rm(i)
-rm(temp)
-rm(x)
-
-### Test ###
-## Removing blanks in OutcomeSubtype ##
-i<-1
-temp <- c()
-for(x in df_test$OutcomeSubtype){
-  if(x == ""){
-    temp<-c(temp,i)
-  }
-  i<-i+1
-}
-if(length(temp) > 0){
-  df_test2<- df_test[-temp,]
-}else{
-  df_test2<- df_test
-}
-rm(i)
-rm(temp)
-rm(x)
-
-## Removing Unknown in SexuponOutcome ##
-i<-1
-temp <- c()
-for(x in df_test2$SexuponOutcome){
-  if(x == "Unknown"){
-    temp<-c(temp,i)
-  }
-  i<-i+1
-}
-if(length(temp) > 0){
-  df_test2<- df_test2[-temp,]
-}else{
-  df_test2<- df_test2
-}
-rm(i)
-rm(temp)
-rm(x)
-
-## Removing blanks from AgeuponOutcome ##
-i<-1
-temp <- c()
-for(x in df_test2$AgeuponOutcome){
-  if(x == ""){
-    temp<-c(temp,i)
-  }
-  i<-i+1
-}
-df_test2<- df_test2[-temp,]
-rm(i)
-rm(temp)
-rm(x)
-
-#### 1b. Make copies of data ####
-df_train_ann <- df_train2
-df_test_ann <- df_test2
-
-#### 2. Summary of dataset ####
-summary(df_train2)
-summary(df_test2)
-
-#### 3. Convert factors to integer  - for Neural Network function ####
-df_train_ann$DateTime <- as.integer(df_train_ann$DateTime)
-df_train_ann$AnimalType <- as.integer(df_train_ann$AnimalType)
-df_train_ann$SexuponOutcome <- as.integer(df_train_ann$SexuponOutcome)
-df_train_ann$AgeuponOutcome <- as.integer(df_train_ann$AgeuponOutcome)
-df_train_ann$Breed <- as.integer(df_train_ann$Breed)
-df_train_ann$Color <- as.integer(df_train_ann$Color)
-
-
-df_test_ann$DateTime <- as.integer(df_test_ann$DateTime)
-df_test_ann$AnimalType <- as.integer(df_test_ann$AnimalType)
-df_test_ann$SexuponOutcome <- as.integer(df_test_ann$SexuponOutcome)
-df_test_ann$AgeuponOutcome <- as.integer(df_test_ann$AgeuponOutcome)
-df_test_ann$Breed <- as.integer(df_test_ann$Breed)
-df_test_ann$Color <- as.integer(df_test_ann$Color)
-
-#### 4. Different Funcitions ####
+library(dplyr)
 
 library(rpart)
 library(rpart.plot)
 library(rattle)
 library(RColorBrewer)
 
-tree <- rpart(OutcomeType~., data= df_train2)
-
 library(kknn)
-
 library(C50)
-
 library(randomForest)
-
 library(neuralnet)
+
+#### 1a. Cleaning of data ####
+names(df_train)[1] <- 'ID'
+df_test$ID <- as.character(df_test$ID)
+
+full_df <- bind_rows(df_train, df_test)
+
+### Removing Unknown in SexuponOutcome ###
+i <- 1
+temp <- c()
+for(x in full_df$SexuponOutcome){
+  if(x == "Unknown"){
+    temp <- c(temp,i)
+  }
+  i <- i+1
+}
+full_df <- full_df[-temp,]
+rm(i)
+rm(temp)
+rm(x)
+
+### Removing blanks from AgeuponOutcome ###
+i<-1
+temp <- c()
+for(x in full_df$AgeuponOutcome){
+  if(x == ""){
+    temp<-c(temp,i)
+  }
+  i<-i+1
+}
+full_df<- full_df[-temp,]
+rm(i)
+rm(temp)
+rm(x)
+
+#### 1b. Data Splits ####
+i<-1
+temp<- c()
+for(x in full_df$OutcomeType){
+  if( is.na(x) | x == "" ){
+    temp <- c(temp,i)
+  }
+  i <- i + 1
+}
+
+df_test_new <- full_df[temp,]
+df_train_new <- full_df[-temp,]
+rm(i)
+rm(x)
+rm(temp)
+
+#### 2. Summary of dataset ####
+summary(full_df)
+summary(df_train_new)
+summary(df_test_new)
+
