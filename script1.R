@@ -121,8 +121,13 @@ summary(df_test_new)
 rm(df_full_new)
 rm(full_df)
 rm(mult_vector)
+
+#### 3. Exports into csv ####
+write.csv(df_train_new, file = "./data/train_new.csv")
+write.csv(df_test_new, file = "./data/test_new.csv")
+
 #### 3.KKNN ####
 
-df_kknn <- kknn(OutcomeType~., train = df_train_new, test = df_test_new, k = 10)
+df_kknn <- kknn(OutcomeType~., train = df_train_new, test = df_test_new, k = 5)
 
 
