@@ -34,7 +34,8 @@ names(df_train)[1] <- 'ID'
 df_test$ID <- as.character(df_test$ID)
 
 full_df <- bind_rows(df_train, df_test)
-
+rm(df_test)
+rm(df_train)
 #### Has name ####
 full_df$HasName <- ifelse(full_df$Name == "", 0, 1)
 
@@ -42,7 +43,7 @@ full_df$HasName <- ifelse(full_df$Name == "", 0, 1)
 i <- 1
 temp <- c()
 for(x in full_df$SexuponOutcome){
-  if(x == ""){
+  if(x == "" || x == "Unknown"){
     temp <- c(temp,i)
   }
   i <- i+1
@@ -52,7 +53,7 @@ rm(i)
 rm(temp)
 rm(x)
 
-### Removing blanks from AgeuponOutcome ####
+#### Removing blanks from AgeuponOutcome ####
 i<-1
 temp <- c()
 for(x in full_df$AgeuponOutcome){
@@ -77,6 +78,18 @@ mult_vector <- ifelse(full_df$TimeUnit == 'day', 1,
                ifelse(full_df$TimeUnit == 'year', 365, NA))))
 full_df$AgeinDays <- full_df$TimeValue * mult_vector
 
+#### Breed -> Mix or Not ####
+full_df$IsMix <- ifelse(grepl('Mix', full_df$Breed), 1,
+                 ifelse(grepl('/',full_df$Breed),1,0)) 
+
+#### Color -> One Word Color ####
+full_df$SimpleColor <- sapply(full_df$Color, function(x) strsplit(x, split = '/| ')[[1]][1])
+
+### Is Neutered ####
+full_df$IsNeutered <- ifelse(grepl('Intact', full_df$SexuponOutcome), 0, 1)
+
+### Gender ####
+full_df$Gender <- ifelse(grepl('Male', full_df$SexuponOutcome), "M", "F")
 
 #### 1b. Data Splits ####
 i<-1
