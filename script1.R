@@ -84,12 +84,15 @@ full_df$IsMix <- ifelse(grepl('Mix', full_df$Breed), 1,
 
 #### Color -> One Word Color ####
 full_df$SimpleColor <- sapply(full_df$Color, function(x) strsplit(x, split = '/| ')[[1]][1])
+full_df$SimpleColor <- factor(full_df$SimpleColor)
 
 ### Is Neutered ####
 full_df$IsNeutered <- ifelse(grepl('Intact', full_df$SexuponOutcome), 0, 1)
 
 ### Gender ####
 full_df$Gender <- ifelse(grepl('Male', full_df$SexuponOutcome), "M", "F")
+full_df$Gender <- factor(full_df$Gender)
+
 #### 1b. New Full Dataset with good columns ####
 
 df_full_new <- full_df[,c("ID", "OutcomeType", "AnimalType", "HasName", "AgeinDays","IsMix","SimpleColor","IsNeutered","Gender")]
