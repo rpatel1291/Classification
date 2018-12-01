@@ -8,7 +8,11 @@
 ##################################################################################################################
 setwd("~/Stevens/Fall2018/CS513_Knowledge_Discovery/Final Project/Classification")
 rm(list = ls())
-library(kknn)
+
+library(rpart)
+library(rpart.plot)
+library(rattle)
+library(RColorBrewer)
 
 df_train <- read.csv("./data/train_new.csv")
 df_test <- read.csv("./data/test_new.csv")
