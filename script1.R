@@ -90,8 +90,11 @@ full_df$IsNeutered <- ifelse(grepl('Intact', full_df$SexuponOutcome), 0, 1)
 
 ### Gender ####
 full_df$Gender <- ifelse(grepl('Male', full_df$SexuponOutcome), "M", "F")
+#### 1b. New Full Dataset with good columns ####
 
-#### 1b. Data Splits ####
+
+
+#### 2. Data Splits ####
 i<-1
 temp<- c()
 for(x in full_df$OutcomeType){
@@ -112,4 +115,3 @@ summary(full_df)
 summary(df_train_new)
 summary(df_test_new)
 
-table(df_test_new$OutcomeType, df_test_new$AnimalType)
