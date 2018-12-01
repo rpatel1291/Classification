@@ -96,6 +96,10 @@ full_df$Gender <- factor(full_df$Gender)
 #### 1b. New Full Dataset with good columns ####
 
 df_full_new <- full_df[,c("ID", "OutcomeType", "AnimalType", "HasName", "AgeinDays","IsMix","SimpleColor","IsNeutered","Gender")]
+df_full_new$Gender <- as.integer(df_full_new$Gender)
+df_full_new$SimpleColor <- as.integer(df_full_new$SimpleColor)
+df_full_new$AnimalType <- as.integer(df_full_new$AnimalType)
+df_full_new$OutcomeType <- as.integer(df_full_new$OutcomeType)
 
 #### 2. Data Splits ####
 i<-1
@@ -123,6 +127,7 @@ rm(full_df)
 rm(mult_vector)
 #### 3.KKNN ####
 
+gc()
 df_kknn <- kknn(OutcomeType~., train = df_train_new, test = df_test_new, k = 10)
 
 
