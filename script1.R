@@ -78,6 +78,11 @@ mult_vector <- ifelse(full_df$TimeUnit == 'day', 1,
                ifelse(full_df$TimeUnit == 'year', 365, NA))))
 full_df$AgeinDays <- full_df$TimeValue * mult_vector
 
+full_df$AgeinDays <- ifelse(full_df$AgeinDays <= 365, "Less than a year",
+                     ifelse(full_df$AgeinDays <= 730, "Less than 2 years",
+                     ifelse(full_df$AgeinDays <= 1095, "Less than 3 years","Over 3 years")))
+full_df$AgeinDays <- factor(full_df$AgeinDays)
+
 #### Breed -> Mix or Not ####
 full_df$IsMix <- ifelse(grepl('Mix', full_df$Breed), 1,
                  ifelse(grepl('/',full_df$Breed),1,0)) 
@@ -96,10 +101,10 @@ full_df$Gender <- factor(full_df$Gender)
 #### 1b. New Full Dataset with good columns ####
 
 df_full_new <- full_df[,c("ID", "OutcomeType", "AnimalType", "HasName", "AgeinDays","IsMix","SimpleColor","IsNeutered","Gender")]
-df_full_new$Gender <- as.integer(df_full_new$Gender)
+# df_full_new$Gender <- as.integer(df_full_new$Gender)
 df_full_new$SimpleColor <- as.integer(df_full_new$SimpleColor)
-df_full_new$AnimalType <- as.integer(df_full_new$AnimalType)
-df_full_new$OutcomeType <- as.integer(df_full_new$OutcomeType)
+# df_full_new$AnimalType <- as.integer(df_full_new$AnimalType)
+# df_full_new$OutcomeType <- as.integer(df_full_new$OutcomeType)
 
 #### 2. Data Splits ####
 i<-1

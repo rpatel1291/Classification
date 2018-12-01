@@ -25,8 +25,10 @@ df_train$SimpleColor <- as.integer(df_train$SimpleColor)
 # df_test$AnimalType <- as.integer(df_test$AnimalType)
 # df_test$SimpleColor <- as.integer(df_test$SimpleColor)
 
+
+
 mytree1 <- rpart(OutcomeType~., data = df_train)
-mytree <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender+ SimpleColor, data = df_train, )
+mytree <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender+ SimpleColor, data = df_train)
 
 rpart.plot(mytree1)
 prp(mytree)
