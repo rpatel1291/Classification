@@ -115,12 +115,17 @@ for(x in df_full_new$OutcomeType){
   }
   i <- i + 1
 }
-
 df_test_new <- df_full_new[temp,]
 df_train_new <- df_full_new[-temp,]
 rm(i)
 rm(x)
 rm(temp)
+
+
+index <- sample(1:nrow(df_train_new), .25*nrow(df_train_new))
+df_test_new <- df_train_new[index,]
+df_train_new <- df_train_new[-index,]
+
 
 #### 2. Summary of dataset ####
 summary(df_full_new)
@@ -130,12 +135,14 @@ summary(df_test_new)
 rm(df_full_new)
 rm(full_df)
 rm(mult_vector)
+rm(index)
 
 #### 3. Exports into csv ####
+
 write.csv(df_train_new, file = "./data/train_new.csv")
 write.csv(df_test_new, file = "./data/test_new.csv")
 
-#### 3.KKNN ####
+
 
 
 
