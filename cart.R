@@ -18,9 +18,16 @@ df_train <- read.csv("./data/train_new.csv")
 df_test <- read.csv("./data/test_new.csv")
 
 df_train$ID <- as.integer(df_train$ID)
-df_train$OutcomeType <- as.integer(df_train$OutcomeType)
-df_train$AnimalType <- as.integer(df_train$AnimalType)
+# df_train$OutcomeType <- as.integer(df_train$OutcomeType)
+# df_train$AnimalType <- as.integer(df_train$AnimalType)
 df_train$SimpleColor <- as.integer(df_train$SimpleColor)
 
-df_test$AnimalType <- as.integer(df_test$AnimalType)
-df_test$SimpleColor <- as.integer(df_test$SimpleColor)
+# df_test$AnimalType <- as.integer(df_test$AnimalType)
+# df_test$SimpleColor <- as.integer(df_test$SimpleColor)
+
+mytree1 <- rpart(OutcomeType~., data = df_train)
+mytree <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender+ SimpleColor, data = df_train, )
+
+rpart.plot(mytree1)
+prp(mytree)
+fancyRpartPlot(mytree)
