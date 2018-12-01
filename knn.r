@@ -21,9 +21,6 @@ df_train$SimpleColor <- as.integer(df_train$SimpleColor)
 df_test$AnimalType <- as.integer(df_test$AnimalType)
 df_test$SimpleColor <- as.integer(df_test$SimpleColor)
 
-train_temp <- df_train[1:1000,]
-test_temp <- df_test[1:50,]
-
-df_kknn <- kknn(OutcomeType~., train = train_temp, test = test_temp, k = 10)
+df_kknn <- kknn(OutcomeType~., train = df_train, test = df_test, k = 10)
 fit<- fitted(df_kknn)
-table(df_test$OutcomeType, fit)
+table(fit)
