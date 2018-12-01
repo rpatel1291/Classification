@@ -1,5 +1,5 @@
 ##################################################################################################################
-####  Purpose: Final Project - Classification - KKNN
+####  Purpose: Final Project - Classification - CART
 ####  Group: Ravi P., Derek P., Aneesh K., Ninad K.
 ####  Date: 11/28/2018
 ####  Comment:
@@ -20,7 +20,3 @@ df_train$SimpleColor <- as.integer(df_train$SimpleColor)
 
 df_test$AnimalType <- as.integer(df_test$AnimalType)
 df_test$SimpleColor <- as.integer(df_test$SimpleColor)
-
-df_kknn <- kknn(OutcomeType~., train = df_train, test = df_test, k = 10)
-fit<- fitted(df_kknn)
-table(fit)
