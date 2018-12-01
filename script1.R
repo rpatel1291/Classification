@@ -118,7 +118,9 @@ summary(df_full_new)
 summary(df_train_new)
 summary(df_test_new)
 
-
+rm(df_full_new)
+rm(full_df)
+rm(mult_vector)
 #### 3.KKNN ####
 
 df_kknn <- kknn(OutcomeType~., train = df_train_new, test = df_test_new, k = 10)
