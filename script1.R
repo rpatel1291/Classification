@@ -121,6 +121,28 @@ rm(i)
 rm(x)
 rm(temp)
 
+summary(df_train_new)
+
+print("Table Animal Type vs Outcome Type")
+table(df_train_new$AnimalType, df_train_new$OutcomeType)
+
+print("Table Has Name vs Outcome Type")
+table(df_train_new$HasName, df_train_new$OutcomeType)
+
+print("Table Age in Days vs Outcome Type")
+table(df_train_new$AgeinDays, df_train_new$OutcomeType)
+
+print("Table Is Mix vs Outcome Type")
+table(df_train_new$IsMix, df_train_new$OutcomeType)
+
+print("Table Simple Color vs Outcome Type")
+table(df_train_new$SimpleColor, df_train_new$OutcomeType)
+
+print("Table Is Neutered vs Outcome Type")
+table(df_train_new$IsNeutered, df_train_new$OutcomeType)
+
+print("Table Gender vs Outcome Type")
+table(df_train_new$Gender, df_train_new$OutcomeType)
 
 index <- sample(1:nrow(df_train_new), .25*nrow(df_train_new))
 df_test_new <- df_train_new[index,]
@@ -128,7 +150,6 @@ df_train_new <- df_train_new[-index,]
 
 
 #### 2. Summary of dataset ####
-summary(df_full_new)
 summary(df_train_new)
 summary(df_test_new)
 
@@ -142,7 +163,50 @@ rm(index)
 write.csv(df_train_new, file = "./data/train_new.csv")
 write.csv(df_test_new, file = "./data/test_new.csv")
 
+#### 4. Table of OutputType ####
+#### Train Dataset ####
+print("Table Animal Type vs Outcome Type")
+table(df_train_new$AnimalType, df_train_new$OutcomeType)
+
+print("Table Has Name vs Outcome Type")
+table(df_train_new$HasName, df_train_new$OutcomeType)
+
+print("Table Age in Days vs Outcome Type")
+table(df_train_new$AgeinDays, df_train_new$OutcomeType)
+
+print("Table Is Mix vs Outcome Type")
+table(df_train_new$IsMix, df_train_new$OutcomeType)
+
+print("Table Simple Color vs Outcome Type")
+table(df_train_new$SimpleColor, df_train_new$OutcomeType)
+
+print("Table Is Neutered vs Outcome Type")
+table(df_train_new$IsNeutered, df_train_new$OutcomeType)
+
+print("Table Gender vs Outcome Type")
+table(df_train_new$Gender, df_train_new$OutcomeType)
 
 
+#### Test Dataset ####
+print("Table Animal Type vs Outcome Type")
+table(df_test_new$AnimalType, df_test_new$OutcomeType)
+
+print("Table Has Name vs Outcome Type")
+table(df_test_new$HasName, df_test_new$OutcomeType)
+
+print("Table Age in Days vs Outcome Type")
+table(df_test_new$AgeinDays, df_test_new$OutcomeType)
+
+print("Table Is Mix vs Outcome Type")
+table(df_test_new$IsMix, df_test_new$OutcomeType)
+
+print("Table Simple Color vs Outcome Type")
+table(df_test_new$SimpleColor, df_test_new$OutcomeType)
+
+print("Table Is Neutered vs Outcome Type")
+table(df_test_new$IsNeutered, df_test_new$OutcomeType)
+
+print("Table Gender vs Outcome Type")
+table(df_test_new$Gender, df_test_new$OutcomeType)
 
 

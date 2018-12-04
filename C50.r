@@ -1,3 +1,11 @@
+##################################################################################################################
+####  Purpose: Final Project - Classification - c50
+####  Group: Ravi P., Derek P., Aneesh K., Ninad K.
+####  Date: 11/28/2018
+####  Comment:
+####    setwd("~/Stevens/Fall2018/CS513_Knowledge_Discovery/Final Project/Classification")
+####
+##################################################################################################################
 rm(list = ls())
 
 library('C50')

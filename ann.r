@@ -1,5 +1,5 @@
 ##################################################################################################################
-####  Purpose: Final Project - Classification - CART
+####  Purpose: Final Project - Classification - ANN
 ####  Group: Ravi P., Derek P., Aneesh K., Ninad K.
 ####  Date: 11/28/2018
 ####  Comment:
@@ -27,11 +27,11 @@ df_train$AgeinDays <- as.integer(df_train$AgeinDays)
 df_test$AnimalType <- as.integer(df_test$AnimalType)
 df_test$SimpleColor <- as.integer(df_test$SimpleColor)
 
-df_ann <- neuralnet(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender+ SimpleColor, data = df_train, threshold = 0.01, hidden = 5)
+df_ann <- neuralnet(OutcomeType ~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender+ SimpleColor, data = df_train, threshold = 0.001, hidden = 10, linear.output = TRUE, stepmax = 100,rep = 3)
 
 plot(df_ann)
 
-net_result <- compute(df_ann, df_test[.c(-1,-2,-3)])
+net_result <- compute(df_ann, df_test[.c(-1)])
 ann <- as.numeric(net_result$net.result)
 
 table(Actual=df_test$OutcomeType)

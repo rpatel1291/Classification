@@ -35,4 +35,4 @@ mytree <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsM
 
 rpart.plot(mytree1)
 prp(mytree)
-fancyRpartPlot(mytree)
+fancyRpartPlot(mytree1)
