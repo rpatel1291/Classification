@@ -6,26 +6,39 @@
 ####    setwd("~/Stevens/Fall2018/CS513_Knowledge_Discovery/Final Project/Classification")
 ####
 ##################################################################################################################
+
 setwd("~/Stevens/Fall2018/CS513_Knowledge_Discovery/Final Project/Classification")
+
+#### 0. Clean environment ####
 rm(list = ls())
+
+#### 1. Import libraries and datasets ####
 library(kknn)
 
 df_train <- read.csv("./data/train_new.csv")
 df_test <- read.csv("./data/test_new.csv")
 
-df_train <- df_train[,2:10]
-df_test <- df_test[,2:10]
+#### 2. Remove unwanted column ####
+df_train <- df_train[,-1]
+df_test <- df_test[,-1]
 
-df_train$ID <- as.integer(df_train$ID)
-# df_train$OutcomeType <- as.integer(df_train$OutcomeType)
-# df_train$AnimalType <- as.integer(df_train$AnimalType)
-# df_train$SimpleColor <- as.integer(df_train$SimpleColor)
+summary(df_test)
 
-# df_test$AnimalType <- df_test(temp_test$AnimalType)
-# df_test$SimpleColor <- df_test(temp_test$SimpleColor)
+df_train$SimpleColor <- as.integer(df_train$SimpleColor)
+df_test$SimpleColor<- as.integer(df_test$SimpleColor)
 
-for(i in c(10,20,30,35,50,55,85)){
-  predict<- kknn(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender+ SimpleColor, train = df_train, test = df_test, k = i, kernel = "rectangular")
+df_k1 <- kknn(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender + SimpleColor, df_train, df_test, k = 1)
+fit <- fitted(df_k1)
+table(df_test$OutcomeType, fit)
+wrong<- (df_test[,2] != fit)
+rate<-sum(wrong)/length(wrong)
+print(rate)
+
+
+#### 3. KKNN Test and Error Rate ####
+
+for(i in c(1,5,10,20,30,35,50,55,75)){
+  predict<- kknn(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender, train = df_train, test = df_test, k = i)
   fit<- fitted(predict)
   wrong<- (df_test[,2] != fit)
   rate<-sum(wrong)/length(wrong)
