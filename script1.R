@@ -16,29 +16,19 @@ df_train <- read.csv("./data/train.csv", na.strings = "?")
 df_test <- read.csv("./data/test.csv", na.strings = "?")
 
 library(dplyr)
-
-library(rpart)
-library(rpart.plot)
-library(rattle)
-library(RColorBrewer)
-
-library(kknn)
-library(C50)
-library(randomForest)
-library(neuralnet)
-
 #### 1a. Cleaning of data ####
 
 #### Renaming of columns ####
 names(df_train)[1] <- 'ID'
-df_test$ID <- as.character(df_test$ID)
-
+df_test$ID <- as.integer(df_test$ID)
+df_train$ID <- as.integer(df_train$ID)
 full_df <- bind_rows(df_train, df_test)
 rm(df_test)
 rm(df_train)
-#### Has name ####
-full_df$HasName <- ifelse(full_df$Name == "", 0, 1)
 
+#### Has name ####
+full_df$HasName <- ifelse(full_df$Name == "", "No", "Yes")
+full_df$HasName <- as.factor(full_df$HasName)
 ### Removing Blanks in SexuponOutcome ###
 i <- 1
 temp <- c()
@@ -83,16 +73,20 @@ full_df$AgeinDays <- ifelse(full_df$AgeinDays <= 365, "Less than a year",
                      ifelse(full_df$AgeinDays <= 1095, "Less than 3 years","Over 3 years")))
 full_df$AgeinDays <- factor(full_df$AgeinDays)
 
+rm(mult_vector)
+
 #### Breed -> Mix or Not ####
-full_df$IsMix <- ifelse(grepl('Mix', full_df$Breed), 1,
-                 ifelse(grepl('/',full_df$Breed),1,0)) 
+full_df$IsMix <- ifelse(grepl('Mix', full_df$Breed), "Yes",
+                 ifelse(grepl('/',full_df$Breed),"Yes","No")) 
+full_df$IsMix <- as.factor(full_df$IsMix)
 
 #### Color -> One Word Color ####
 full_df$SimpleColor <- sapply(full_df$Color, function(x) strsplit(x, split = '/| ')[[1]][1])
 full_df$SimpleColor <- factor(full_df$SimpleColor)
 
 ### Is Neutered ####
-full_df$IsNeutered <- ifelse(grepl('Intact', full_df$SexuponOutcome), 0, 1)
+full_df$IsNeutered <- ifelse(grepl('Intact', full_df$SexuponOutcome), "No", "Yes")
+full_df$IsNeutered <- as.factor(full_df$IsNeutered)
 
 ### Gender ####
 full_df$Gender <- ifelse(grepl('Male', full_df$SexuponOutcome), "M", "F")
@@ -102,11 +96,11 @@ full_df$Gender <- factor(full_df$Gender)
 
 df_full_new <- full_df[,c("ID", "OutcomeType", "AnimalType", "HasName", "AgeinDays","IsMix","SimpleColor","IsNeutered","Gender")]
 # df_full_new$Gender <- as.integer(df_full_new$Gender)
-df_full_new$SimpleColor <- as.integer(df_full_new$SimpleColor)
+# df_full_new$SimpleColor <- as.integer(df_full_new$SimpleColor)
 # df_full_new$AnimalType <- as.integer(df_full_new$AnimalType)
 # df_full_new$OutcomeType <- as.integer(df_full_new$OutcomeType)
 
-#### 2. Data Splits ####
+#### 2. Remove all NA Values in OutcomeType ####
 i<-1
 temp<- c()
 for(x in df_full_new$OutcomeType){
@@ -115,56 +109,50 @@ for(x in df_full_new$OutcomeType){
   }
   i <- i + 1
 }
-df_test_new <- df_full_new[temp,]
-df_train_new <- df_full_new[-temp,]
+df_full_new <- df_full_new[-temp,]
 rm(i)
 rm(x)
 rm(temp)
 
-summary(df_train_new)
+
+#### 3. Summary of Full Dataset ####
+
+summary(df_full_new)
 
 print("Table Animal Type vs Outcome Type")
-table(df_train_new$AnimalType, df_train_new$OutcomeType)
+table(df_full_new$AnimalType, df_full_new$OutcomeType)
 
 print("Table Has Name vs Outcome Type")
-table(df_train_new$HasName, df_train_new$OutcomeType)
+table(df_full_new$HasName, df_full_new$OutcomeType)
 
 print("Table Age in Days vs Outcome Type")
-table(df_train_new$AgeinDays, df_train_new$OutcomeType)
+table(df_full_new$AgeinDays, df_full_new$OutcomeType)
 
 print("Table Is Mix vs Outcome Type")
-table(df_train_new$IsMix, df_train_new$OutcomeType)
+table(df_full_new$IsMix, df_full_new$OutcomeType)
 
 print("Table Simple Color vs Outcome Type")
-table(df_train_new$SimpleColor, df_train_new$OutcomeType)
+table(df_full_new$SimpleColor, df_full_new$OutcomeType)
 
 print("Table Is Neutered vs Outcome Type")
-table(df_train_new$IsNeutered, df_train_new$OutcomeType)
+table(df_full_new$IsNeutered, df_full_new$OutcomeType)
 
 print("Table Gender vs Outcome Type")
-table(df_train_new$Gender, df_train_new$OutcomeType)
-
-index <- sample(1:nrow(df_train_new), .25*nrow(df_train_new))
-df_test_new <- df_train_new[index,]
-df_train_new <- df_train_new[-index,]
+table(df_full_new$Gender, df_full_new$OutcomeType)
 
 
-#### 2. Summary of dataset ####
-summary(df_train_new)
-summary(df_test_new)
-
-rm(df_full_new)
-rm(full_df)
-rm(mult_vector)
+#### 4. Splitting the data into training and test ####
+index <- sample(1:nrow(df_full_new), .25*nrow(df_full_new))
+df_test_new <- df_full_new[index,]
+df_train_new <- df_full_new[-index,]
 rm(index)
+rm(df_full_new)
 
-#### 3. Exports into csv ####
+#### 5. Summary of Training/Test dataset ####
 
-write.csv(df_train_new, file = "./data/train_new.csv")
-write.csv(df_test_new, file = "./data/test_new.csv")
-
-#### 4. Table of OutputType ####
 #### Train Dataset ####
+summary(df_train_new)
+
 print("Table Animal Type vs Outcome Type")
 table(df_train_new$AnimalType, df_train_new$OutcomeType)
 
@@ -188,6 +176,9 @@ table(df_train_new$Gender, df_train_new$OutcomeType)
 
 
 #### Test Dataset ####
+
+summary(df_test_new)
+
 print("Table Animal Type vs Outcome Type")
 table(df_test_new$AnimalType, df_test_new$OutcomeType)
 
@@ -208,5 +199,13 @@ table(df_test_new$IsNeutered, df_test_new$OutcomeType)
 
 print("Table Gender vs Outcome Type")
 table(df_test_new$Gender, df_test_new$OutcomeType)
+
+
+#### 6. Exports into csv ####
+
+write.csv(df_train_new, file = "./data/train_new.csv")
+write.csv(df_test_new, file = "./data/test_new.csv")
+
+
 
 
