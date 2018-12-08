@@ -17,10 +17,11 @@ library(RColorBrewer)
 df_train <- read.csv("./data/train_new.csv")
 df_test <- read.csv("./data/test_new.csv")
 
-df_train <- df_train[,2:10]
-df_test <- df_test[,2:10]
+df_train <- df_train[,-1]
+df_test <- df_test[,-1]
 
-df_train$ID <- as.integer(df_train$ID)
+levels(df_test$SimpleColor) <- levels(df_train$SimpleColor)
+
 # df_train$OutcomeType <- as.integer(df_train$OutcomeType)
 # df_train$AnimalType <- as.integer(df_train$AnimalType)
 df_train$SimpleColor <- as.integer(df_train$SimpleColor)

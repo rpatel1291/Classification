@@ -23,6 +23,7 @@ df_test <- read.csv("./data/test_new.csv")
 #### 2. Remove unwanted data ####
 df_train <- df_train[,-1]
 df_test <- df_test[,-1]
+levels(df_test$SimpleColor) <- levels(df_train$SimpleColor)
 
 #### 3.C5.0 Tree ####
 
