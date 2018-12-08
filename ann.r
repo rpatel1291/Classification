@@ -23,6 +23,8 @@ df_test <- read.csv("./data/test_new.csv")
 df_train <- df_train[,-1]
 df_test <- df_test[,-1]
 
+levels(df_test$SimpleColor) <- levels(df_train$SimpleColor)
+
 #### 3. Neural Net ####
 
 df_train$OutcomeType <- as.integer(df_train$OutcomeType)
