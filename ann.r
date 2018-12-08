@@ -35,16 +35,14 @@ df_train$IsNeutered <- as.integer(df_train$IsNeutered)
 df_train$IsMix <- as.integer(df_train$IsMix)
 
 
-df_ann <- neuralnet(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered, data = df_train,linear.output = T, hidden=c(10,4,2))
+df_ann <- neuralnet(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix, data = df_train,linear.output = T, hidden=c(20,12,5))
 
-# + HasName+ IsNeutered + IsMix + Gender
-
-plot(df_ann)
-df_ann <- neuralnet(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender, data = df_train, threshold = 0.001, hidden = 10, stepmax = 10000)
+# + IsMix + Gender
 
 plot(df_ann)
+summary(df_ann)
 
-net_result <- compute(df_ann, df_test[,c(-1)])
+net_result <- compute(df_ann, df_test)
 ann <- as.numeric(net_result$net.result)
 
 table(Actual=df_test$OutcomeType)
