@@ -21,6 +21,7 @@ df_test <- read.csv("./data/test_new.csv")
 #### 2. Remove unwanted column ####
 df_train <- df_train[,-1]
 df_test <- df_test[,-1]
+levels(df_test$SimpleColor) <- levels(df_train$SimpleColor)
 
 summary(df_test)
 
