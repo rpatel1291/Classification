@@ -37,11 +37,19 @@ print(rate)
 
 #### 3. KKNN Test and Error Rate ####
 
-for(i in c(1,5,10,20,30,35,50,55,75)){
-  predict<- kknn(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender, train = df_train, test = df_test, k = i)
+for(i in c(1,5,10,20,30,40,50,60,70,80,90,100)){
+  predict<- kknn(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender +SimpleColor, train = df_train, test = df_test, k = i)
   fit<- fitted(predict)
   wrong<- (df_test[,2] != fit)
   rate<-sum(wrong)/length(wrong)
-  print(rate)
+  cat(sprintf("k = %f Performance: %f \n",i, rate))
 }
+
+predict<- kknn(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender +SimpleColor, train = df_train, test = df_test, k = 70)
+fit<- fitted(predict)
+wrong<- (df_test[,2] != fit)
+rate<-sum(wrong)/length(wrong)
+cat(sprintf("k = %f Performance: %f \n",70, rate))
+table(df_test$OutcomeType, fit)
+
 

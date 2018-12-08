@@ -26,7 +26,11 @@ fit <- randomForest( OutcomeType~., data=df_train[,-1], importance=TRUE, ntree=1
 importance(fit)
 varImpPlot(fit)
 Prediction <- predict(fit, df_test[,-1])
+
 table(actual=df_test$OutcomeType ,Prediction)
+plot(fit, ylim=c(0,1))
+legend('topright', colnames(fit$err.rate), col=1:6, fill=1:6)
+
 
 
 wrong<- (df_test$OutcomeType!=Prediction )
