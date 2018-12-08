@@ -15,6 +15,10 @@ df_test <- read.csv("./data/test_new.csv")
 df_train <- df_train[,2:10]
 df_test <- df_test[,2:10]
 
+
+levels(df_test$SimpleColor) <- levels(df_train$SimpleColor)
+
+
 df_train$ID <- as.integer(df_train$ID)
 
 # install.packages("e1071")
