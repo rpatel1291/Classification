@@ -37,10 +37,11 @@ df_train$IsNeutered <- as.integer(df_train$IsNeutered)
 df_train$IsMix <- as.integer(df_train$IsMix)
 
 
-df_ann <- neuralnet(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix, data = df_train,linear.output = T, hidden=c(20,12,5))
+df_ann <- neuralnet(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix, data = df_train,linear.output = T, hidden=c(30,15,5))
 
 # + IsMix + Gender
 
+#### 4. Error Checking ####
 plot(df_ann)
 summary(df_ann)
 
