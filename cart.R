@@ -20,20 +20,27 @@ df_test <- read.csv("./data/test_new.csv")
 df_train <- df_train[,-1]
 df_test <- df_test[,-1]
 
-levels(df_test$SimpleColor) <- levels(df_train$SimpleColor)
+# levels(df_test$SimpleColor) <- levels(df_train$SimpleColor)
 
 # df_train$OutcomeType <- as.integer(df_train$OutcomeType)
 # df_train$AnimalType <- as.integer(df_train$AnimalType)
 df_train$SimpleColor <- as.integer(df_train$SimpleColor)
 
 # df_test$AnimalType <- as.integer(df_test$AnimalType)
-# df_test$SimpleColor <- as.integer(df_test$SimpleColor)
+df_test$SimpleColor <- as.integer(df_test$SimpleColor)
 
 
 
-mytree1 <- rpart(OutcomeType~., data = df_train)
-mytree <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender+ SimpleColor, data = df_train)
+mytree1 <- rpart(OutcomeType~., data = df_train[,c(-1)], control=rpart.control(minsplit=1, minbucket=1, cp=0.001))
+# mytree <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender + SimpleColor, data = df_train)
+summary(mytree1)
+
+prediction<-predict( mytree1 ,df_test , type="class" )
+table(actual=df_test[,2],prediction)
+wrong<- (df_test[,2]!=prediction)
+rate<-sum(wrong)/length(wrong)
+print(rate)
 
 rpart.plot(mytree1)
-prp(mytree)
+prp(mytree1)
 fancyRpartPlot(mytree1)
