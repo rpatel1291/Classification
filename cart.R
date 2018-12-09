@@ -30,16 +30,34 @@ df_train$SimpleColor <- as.integer(df_train$SimpleColor)
 df_test$SimpleColor <- as.integer(df_test$SimpleColor)
 
 
+#Make three trees with different complexity parameters
+# mytree1 <- rpart(OutcomeType~., data = df_train[,c(-1)], control=rpart.control(minsplit=1, minbucket=1, cp=0.001))
+mytree3 <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender + SimpleColor, data = df_train,  control=rpart.control(minsplit=1, minbucket=1, cp=0.01))
+mytree2 <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender + SimpleColor, data = df_train,  control=rpart.control(minsplit=1, minbucket=1, cp=0.005))
+mytree1 <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender + SimpleColor, data = df_train,  control=rpart.control(minsplit=1, minbucket=1, cp=0.001))
 
-mytree1 <- rpart(OutcomeType~., data = df_train[,c(-1)], control=rpart.control(minsplit=1, minbucket=1, cp=0.001))
-# mytree <- rpart(OutcomeType~ AnimalType + AgeinDays + HasName + IsNeutered + IsMix + Gender + SimpleColor, data = df_train)
-summary(mytree1)
+##Check error rate of tree with cp = .01
+prediction<-predict( mytree3 ,df_test , type="class" )
+table(actual=df_test[,2],prediction)
+wrong<- (df_test[,2]!=prediction)
+rate<-sum(wrong)/length(wrong)
+print(rate)
 
+##Check error rate of tree with cp = .005
+prediction<-predict( mytree2 ,df_test , type="class" )
+table(actual=df_test[,2],prediction)
+wrong<- (df_test[,2]!=prediction)
+rate<-sum(wrong)/length(wrong)
+print(rate)
+
+##Check error rate of tree with cp = .001
 prediction<-predict( mytree1 ,df_test , type="class" )
 table(actual=df_test[,2],prediction)
 wrong<- (df_test[,2]!=prediction)
 rate<-sum(wrong)/length(wrong)
 print(rate)
+
+summary(mytree1)
 
 rpart.plot(mytree1)
 prp(mytree1)
