@@ -22,7 +22,7 @@ levels(df_test$SimpleColor) <- levels(df_train$SimpleColor)
 library(randomForest)
 
 
-fit <- randomForest( OutcomeType~., data=df_train[,-1], importance=TRUE, ntree=1000)
+fit <- randomForest( OutcomeType~., data=df_train[,-1], importance=TRUE, ntree=1200)
 importance(fit)
 varImpPlot(fit)
 Prediction <- predict(fit, df_test[,-1])
